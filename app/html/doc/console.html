@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>console</title>
+	<style type="text/css">
+		/* body {background-color:	#111;}
+		p {color:rgba(255,255,255,0.8);}
+		table{color:darkgrey;border-color:black;} */
+
+		.one {
+			font-size: 15px;
+			color: rgb(74, 74, 74);
+		}
+	</style>
+
+</head>
+
+<body>
+	<h4>console</h4>
+	<p id="pMesg"></p>
+	<p id="pHostNum"> </p>
+	<p id="pRtmpHostName"> </p>
+	<p id="pPublishNum"> </p>
+	<table border="1" id="tableRtmpSrv">
+		<tr>
+			<th class="one">id</th>
+			<th class="one">publisher</th>
+			<th class="one">player</th>
+		</tr>
+		<tr>
+			<td>0</td>
+			<td>srvName:<strong>null</strong><br>
+				bREcord:<strong>null</strong><br>
+				playNum:<strong>null</strong>
+			</td>
+			<td>player:<strong>null</strong></td>
+		</tr>
+	</table>
+	<hr>
+	<p id="pRtspHostName"> </p>
+	<table border="1" id="tableRtspSrv">
+		<tr>
+			<th class="one">id</th>
+			<th class="one">source</th>
+			<th class="one">client</th>
+		</tr>
+		<tr>
+			<td>0</td>
+			<td>name:<strong>null</strong><br>
+				duration:<strong>null</strong><br>
+				clientNum:<strong>null</strong>
+			</td>
+			<td>client:<strong>null</strong></td>
+		</tr>
+	</table>
+
+	<hr>
+
+	<p id="pTest"></p>
+	<script type="text/javascript">
+		ulRtmpStatus = document.getElementById("ulRtmpStatus");
+
+		function tableInit() {
+			var tableRtmpSrv = document.getElementById("tableRtmpSrv");
+			var tdIdContent = "";
+			var listItem = document.createElement('tr');
+			tdIdContent = parseInt(0);
+			var tdPublisherContent = "";
+			tdPublisherContent += "srvName:" + "null" + "<br>";
+			tdPublisherContent += "bRecord:" + "null" + "<br>";
+
+			var tdPlayerContent = "";
+			tdPlayerContent += "player:" + "null" + "<br><hr>";
+			tdPublisherContent += "playerNum:" + parseInt(0);
+
+			listItem.innerHTML = "<td>" + tdIdContent + "</td>";
+			listItem.innerHTML += "<td>" + tdPublisherContent + "</td>";
+			listItem.innerHTML += "<td>" + tdPlayerContent + "</td>";
+			tableRtmpSrv.appendChild(listItem);
+		}
+
+		// 获取参数后所做的事情
+		function tableshowJsonDat(json) {
+			var root = json;
+			document.getElementById("pHostNum").innerHTML = "HostNum:" + root["host"].length;
+			for (var i = 0; i < root["host"].length; i++) {
+				var hIterm = root["host"][i];
+
+				if (hIterm["name"] == "rtmpServer") {
+					document.getElementById("pRtmpHostName").innerHTML = "HostName:" + hIterm["name"];
+					document.getElementById("pPublishNum").innerHTML = "publishNum:" + hIterm["publishNum"];
+
+					var tableRtmpSrv = document.getElementById("tableRtmpSrv");
+					var trLen = tableRtmpSrv.getElementsByTagName("tr").length;
+					var allTr = tableRtmpSrv.getElementsByTagName("tr");
+					for (var tri = 1; tri < trLen; tri++) {
+						allTr[1].remove();
+					}
+
+					var sourceLen = hIterm["source"].length;
+					var j
+					if (sourceLen==0){
+						tableInit();
+					}
+					// for(j=sourceLen -1 ; (j>=0 && (sourceLen-j)<=10 ); j-- ){
+					for (j = sourceLen - 1; (j >= 0); j--) {
+						var sourceIterm = hIterm["source"][j];
+						var listItem = document.createElement('tr');
+
+						var tdIdContent = "";
+						tdIdContent = parseInt(j + 1);
+						var tdPublisherContent = "";
+						tdPublisherContent += "srvName:" + sourceIterm["srvName"] + "<br>";
+						tdPublisherContent += "bRecord:" + sourceIterm["bRecord"] + "<br>";
+
+						var tdPlayerContent = "";
+						var playerLen = sourceIterm["player"].length;
+						for (k = playerLen - 1; (k >= 0); k--) {
+							tdPlayerContent += "player:" + sourceIterm["player"][k] + "<br><hr>";
+						}
+						tdPublisherContent += "playerNum:" + parseInt(playerLen);
+
+						listItem.innerHTML = "<td>" + tdIdContent + "</td>";
+						listItem.innerHTML += "<td>" + tdPublisherContent + "</td>";
+						listItem.innerHTML += "<td>" + tdPlayerContent + "</td>";
+						tableRtmpSrv.appendChild(listItem);
+					}
+					if (sourceLen - j > 10) {
+						// listItem.innerHTML += "<li>"+ parseInt(j+1) +", source:"	+ "..." 	+"</li>";
+					}
+				}
+				else if (hIterm["name"] == "rtspServer"){
+					var tableRtspSrv = document.getElementById("tableRtspSrv");
+					var trLen = tableRtspSrv.getElementsByTagName("tr").length;
+					var allTr = tableRtspSrv.getElementsByTagName("tr");
+					for (var tri = 1; tri < trLen; tri++) {
+						allTr[1].remove();
+					}
+
+					var sourceLen = hIterm["source"].length;
+					var j
+					// if (sourceLen==0){
+					// 	tableInit();
+					// }
+					for (j = sourceLen - 1; (j >= 0); j--) {
+						var sourceIterm = hIterm["source"][j];
+						var listItem = document.createElement('tr');
+
+						var tdIdContent = "";
+						tdIdContent = parseInt(j + 1);
+						var tdSourceContent = "";
+						tdSourceContent += "name:" + sourceIterm["name"] + "<br>";
+
+						var tdClientContent = "";
+						var clientLen = sourceIterm["client"].length;
+						for (k = clientLen - 1; (k >= 0); k--) {
+							var clientIterm = sourceIterm["client"][k];
+							tdClientContent += "name:" + clientIterm["name"] + "<br>";
+							tdClientContent += "info:" + clientIterm["info"] + "<br>";
+						}
+						tdSourceContent += "clientNum:" + parseInt(clientLen);
+
+						listItem.innerHTML = "<td>" + tdIdContent + "</td>";
+						listItem.innerHTML += "<td>" + tdSourceContent + "</td>";
+						listItem.innerHTML += "<td>" + tdClientContent + "</td>";
+						tableRtspSrv.appendChild(listItem);
+
+					}
+				}
+				else{
+					console.log("err, unknow host name ", hIterm["name"])
+				}
+				
+			}
+
+		}
+
+
+
+
+
+
+		function getJsonDat(interVal) {
+			fetch('/apiv1/console')
+				.then(function (response) {
+					if (!response.ok) {
+						throw new Error("HTTP error, status = " + response.status);
+					}
+					return response.json();
+				})
+				.then(function (json) {
+					//do something
+					// showJsonDat(json);
+					tableshowJsonDat(json);
+				})
+				.catch(function (error) {
+					var pMesg = document.getElementById("pMesg");
+					pMesg.innerHTML = "";
+					pMesg.innerHTML = error.message;
+					// var p = document.createElement('p');
+					// p.appendChild(
+					//     document.createTextNode('Error: ' + error.message)
+					// );
+					// document.body.insertBefore(p, ulRtmpStatus);
+				});
+
+		}
+
+		// 定时获取参数
+		function rtmpInterRequest() {
+			var jsonTest = {};
+			{
+				jsonTest.name = "media server"
+				jsonTest.host = []
+				{
+					var iterm = {};
+					iterm.name = "rtmpHost"
+					iterm.publishNum = 1;
+					iterm.playerNum = 2;
+					iterm.source = [];
+					iterm.source.push("live1");
+					iterm.source.push("live2");
+					iterm.source.push("live3");
+					iterm.source.push("live4");
+					iterm.source.push("live5");
+					iterm.source.push("live1");
+					iterm.source.push("live2");
+					iterm.source.push("live3");
+					iterm.source.push("live4");
+					iterm.source.push("live5");
+					iterm.source.push("live1");
+					iterm.source.push("live2");
+					iterm.source.push("live3");
+					iterm.source.push("live4");
+					iterm.source.push("live5");
+					jsonTest.host.push(iterm);
+				}
+				{
+					var iterm = {};
+					iterm.name = "rtspHost"
+					iterm.publishNum = 3;
+					iterm.playerNum = 4;
+					iterm.source = [];
+					iterm.source.push("rtsplive1");
+					iterm.source.push("rtsplive2");
+					jsonTest.host.push(iterm);
+				}
+			}
+
+			getJsonDat(1000);
+
+			//set	
+			//
+		}
+
+		var interval = setInterval(function () {
+			rtmpInterRequest();
+		}, 1000);
+
+
+
+	</script>
+
+</body>
+
+
+
+</html>

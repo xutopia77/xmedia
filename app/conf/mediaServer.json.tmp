@@ -1,0 +1,49 @@
+{
+    "appName"           :   "corSrv",
+    "logLevel_comment": "DBG INFO WARN ERR NONE", 
+    "logLevel"          :   "DBG",
+    
+    "daemon"            :   "on",
+    
+    "logTank"           :   "console",
+    "datInPath"         :   "../dat/in",
+    "datOutPath"        :   "../dat/out",
+    "inH264AacFlv"      :   "h264.640x360_aac_31s.flv",
+    "httpSrvCfg":{
+        "ip":"localhost",
+        "port":8000,
+        "listenQSize":256
+    },  
+    "mediaSrvCfg":{
+        "isStartRtmpSrv":true,
+        "isStartRtspSrv":true
+    },
+    "rtmpSrvCfg":{
+        "ip":"localhost",
+        "port":1935,
+        "listenQSize":256,
+        "staticPrtLevel" : 0
+    },
+    "rtmpPusherCfg":{
+        "pushHost"        :   "localhost",
+        "pushApp"         :   "live",
+        "pushStream"      :   "avc",
+        "pushOriginFile"  :   "h264.640x360_aac_31s.flv"
+    },
+    "rtmpPlayerCfg":{
+        "playerHost"           :  "localhost",
+        "playerApp"            :  "live",
+        "playerStream"         :  "avc",
+        "bRecord"              :  true,
+        
+        "pullNum"              :   20
+    },
+    
+    "rtspSrvCfg":{
+        "ip":"localhost",
+        "port":8554,
+        "listenQSize":256,
+        "staticPrtLevel" : 0
+    }
+}
+

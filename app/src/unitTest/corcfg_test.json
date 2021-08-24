@@ -1,0 +1,33 @@
+{
+    "name": "rtmpServer",
+    "int1":100,
+    "int2":{
+        "int1":101,
+        "int2":{
+            "int1":102,
+            "int2":103
+        }
+    },
+    "str1":"100",
+    "str2":{
+        "str1":"str101",
+        "str2":{
+            "str1":"102",
+            "str2":"103"
+        },
+        "str3":100
+    },
+    "arr1":[
+        {
+            "hostName":"name1",
+            "id":11
+        },
+        {
+            "hostName":"name2",
+            "id":12
+        }
+    ],
+    "bool1":{
+        "bool1":true
+    }
+}

@@ -1,0 +1,11 @@
+
+# bin/main
+
+*.o
+*.d
+
+# **/*.vcxproj
+# **/*.vcxproj.filters
+# **/*.xcodeproj
+
+dat/
